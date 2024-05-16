@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "324265912915",
+    "firebase_url": "https://desal-pro-default-rtdb.firebaseio.com",
+    "project_id": "desal-pro",
+    "storage_bucket": "desal-pro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324265912915:android:c8c534cab1548e47f2f4a6",
+        "android_client_info": {
+          "package_name": "com.desalpro.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0HCow-22_sIK324tC0w5hdEw9uVliWkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
