@@ -1,6 +1,3 @@
-// ignore: depend_on_referenced_packages
-// import 'package:app/cek_kualitas_air_screen.dart';
-
 import 'package:desal_pro/riwayat_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -164,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Row(
                   children: [
                     Text(
@@ -177,12 +174,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(width: 125),
                     Container(
-                      width: 51,
-                      height: 13,
+                      width: 41,
+                      height: 11,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.green,
-                      ),
+                        color: Color.fromARGB(255, 16, 229, 23)          ),
                     ),
                   ],
                 ),
@@ -190,30 +186,30 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-            top: 50,
-            right: 18,
+            top: 60,
+            right: 20,
             child: Image.asset(
               'images/Logo.png',
               width: 90,
-              height: 90,
+              height: 80,
             ),
           ),
           Positioned(
-            top: 220,
-            left: 20,
-            right: 20,
-            bottom: 5, // Menaruh container ke bawah
+            top: 200,
+            left: 19,
+            right: 19,
+            bottom: 19, // Menaruh container ke bawah
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 10),
+                    padding: const EdgeInsets.only(left: 15, top: 10),
                     child: Text(
                       'Kualitas Air Penampungan Akhir',
                       style: TextStyle(
@@ -238,21 +234,21 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'pH Air                                               : $ph_air',
+                            'pH Air                                             : $ph_air',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kandungan Garam                         : $kandungan_garam',
+                            'Kandungan Garam                       : $kandungan_garam',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Suhu Air                                           : $suhu_air°C',
+                            'Suhu Air                                         : $suhu_air°C',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -264,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 10),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 15),
                     child: Text(
                       'Volume Penampungan',
                       style: TextStyle(
@@ -298,14 +294,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air                                       : $volume1 ml',
+                            'Volume Air                                     : $volume1 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan               : 5000 ml',
+                            'Kapasitas Penampungan             : 5000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -316,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                             // Garis pemisah 1
                             color: Colors.white,
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Text(
                             'Penampungan 2',
                             textAlign: TextAlign.center,
@@ -327,18 +323,18 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air                                       : $volume2 ml',
+                            'Volume Air                                     : $volume2 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
-                          Text('Kapasitas Penampungan               : 2000 ml',
+                          Text('Kapasitas Penampungan             : 2000 ml',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
                               )),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Divider(
                             // Garis pemisah 2
                             color: Colors.white,
@@ -354,14 +350,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air                                       : $volume3 ml',
+                            'Volume Air                                     : $volume3 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan               : 7000 ml',
+                            'Kapasitas Penampungan             : 7000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -421,7 +417,7 @@ Widget _buildCheckButton(BuildContext context) {
       icon: Icon(
         Icons.power_settings_new,
         color: const Color.fromARGB(255, 243, 0, 0),
-        size: 25,
+        size: 20,
       ),
       label: Text(
         isPumpRunning ? 'Stop Pompa Air' : 'Start Pompa Air',
