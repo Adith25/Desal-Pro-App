@@ -22,16 +22,57 @@ class _HistoryPageState extends State<HistoryPage> {
     initializeDateFormatting(); // Initialize date formatting
   }
 
+  Future<void> _deleteAllHistory() async {
+    final collection =
+        FirebaseFirestore.instance.collection('Riwayat Pompa Air');
+    final snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      await doc.reference.delete();
+    }
+  }
+
+  void _confirmDeleteAllHistory() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Konfirmasi Hapus'),
+        content:
+            Text('Apakah Anda yakin ingin menghapus semua riwayat pompa air?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Tidak'),
+          ),
+          TextButton(
+            onPressed: () {
+              _deleteAllHistory();
+              Navigator.of(context).pop();
+            },
+            child: Text('Ya'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Riwayat Pompa Air',
-          style: TextStyle(color: Colors.white),
+        title: Center(
+          child: Text(
+            'Riwayat Pompa Air',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-        backgroundColor: Color(0xFF0D85D8),
+        backgroundColor: Color(0xFF0C2366),
         iconTheme: IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: _confirmDeleteAllHistory,
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -44,7 +85,23 @@ class _HistoryPageState extends State<HistoryPage> {
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('Belum ada data riwayat'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'images/no_data-.png',
+                    width: 250,
+                    height: 250,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Belum ada data riwayat pompa air',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+            );
           }
 
           List<Map<String, dynamic>> events = _processData(snapshot.data!.docs);
@@ -110,8 +167,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                   vertical: 5, horizontal: 25),
                               decoration: BoxDecoration(
                                 color: event['statusAlat']
-                                    ? Color(
-                                        0xFF89E578) // Warna hijau jika statusAlat bernilai true
+                                    ? Color.fromARGB(255, 118, 223, 100) // Warna hijau jika statusAlat bernilai true
                                     : Color(
                                         0xFFFC6C61), // Warna merah jika statusAlat bernilai false
                                 borderRadius: BorderRadius.circular(

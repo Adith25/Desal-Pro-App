@@ -9,13 +9,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int ph_air = 0;
+  double ph_air = 0.0;
   double kandungan_garam = 0.0;
   int suhu_air = 0;
   int volume1 = 0;
   int volume2 = 0;
   int volume3 = 0;
   bool isPumpRunning = false;
+  final DatabaseReference _databaseReference =
+      FirebaseDatabase.instance.reference().child('status_pompa');
 
   @override
   void initState() {
@@ -29,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       print('Nilai dari Firebase: ${event.snapshot.value}');
       if (event.snapshot.value != null) {
         setState(() {
-          ph_air = int.parse(event.snapshot.value.toString());
+          ph_air = double.parse(event.snapshot.value.toString());
         });
       }
     });
@@ -137,11 +139,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(width: 125),
                     Container(
-                      width: 41,
+                      width: 38,
                       height: 11,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 16, 229, 23),
+                        color: Color.fromARGB(255, 0, 255, 0), // Hijau terang
                       ),
                     ),
                   ],
@@ -151,10 +153,10 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
             top: 60,
-            right: 20,
+            right: 10,
             child: Image.asset(
               'images/Logo.png',
-              width: 90,
+              width: 80,
               height: 80,
             ),
           ),
@@ -198,21 +200,21 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'pH Air:                                        $ph_air',
+                            'pH Air                                        : $ph_air',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kandungan Garam:                   $kandungan_garam',
+                            'Kandungan Garam                   : $kandungan_garam',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Suhu Air:                                    $suhu_air°C',
+                            'Suhu Air                                     : $suhu_air°C',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -233,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 1),
                   Card(
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -258,21 +260,20 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                    
-                            'Volume Air:                               $volume1 ml',
+                            'Volume Air                                       $volume1 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan:       5000 ml',
+                            'Kapasitas                                         5000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Divider(
                             color: Colors.white,
                           ),
@@ -287,14 +288,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air:                                $volume2 ml',
+                            'Volume Air                                        $volume2 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan:        2000 ml',
+                            'Kapasitas                                          7000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -304,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                           Divider(
                             color: Colors.white,
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Text(
                             'Penampungan Akhir',
                             textAlign: TextAlign.center,
@@ -315,18 +316,22 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air:                                $volume3 ml',
+                            'Volume Air                                          $volume3 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan:        7000 ml',
+                            'Kapasitas                                          5000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
+                          ),
+                          SizedBox(height: 10),
+                          Divider(
+                            color: Colors.white,
                           ),
                           SizedBox(height: 10),
                           _buildSwitch(),
@@ -345,15 +350,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-Widget _buildSwitch() {
+  Widget _buildSwitch() {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(horizontal: 8),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: isPumpRunning ? Colors.red : Colors.green, // Button color
+          backgroundColor:
+              isPumpRunning ? Colors.red : Colors.green, // Button color
           padding: EdgeInsets.symmetric(
-              horizontal: 24, vertical: 12), // Button padding
+              horizontal: 44, vertical: 9), // Button padding
         ),
         onPressed: () async {
           setState(() {
@@ -362,8 +368,10 @@ Widget _buildSwitch() {
 
           if (isPumpRunning) {
             _startPump(); // Call function to start the pump
+            await _databaseReference.set('ON'); // Update status to ON in RTDB
           } else {
             _stopPump(); // Call function to stop the pump
+            await _databaseReference.set('OFF'); // Update status to OFF in RTDB
           }
         },
         child: Text(
@@ -377,8 +385,6 @@ Widget _buildSwitch() {
       ),
     );
   }
-
-
 
   void _startPump() async {
     // Logika untuk memulai pompa air
@@ -413,7 +419,7 @@ Widget _buildSwitch() {
           backgroundColor: Colors.transparent,
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(25),
             side: BorderSide(color: Colors.blue),
           ),
         ),
