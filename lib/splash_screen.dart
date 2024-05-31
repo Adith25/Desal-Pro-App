@@ -1,32 +1,43 @@
 import 'dart:async';
-import 'package:desal_pro/home_screen.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
-// import 'package:home_page.dart'; // Mengimport file home_page.dart
+import 'package:desal_pro/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  bool _isLoading = false; // State untuk mengontrol animasi loading
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  bool _isLoading = false;
+  bool _showLogo = false;
   Timer? _timer;
-
-  get color => null; // Timer untuk mengatur animasi
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    // Setelah 4 detik, navigasi ke HomePage
-    _timer = Timer(Duration(seconds: 4), () {
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 7),
+    )..repeat();
+
+    _timer = Timer(Duration(seconds: 7), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
     });
 
-    // Memulai animasi loading setelah 0.5 detik
     Timer(Duration(milliseconds: 500), () {
+      setState(() {
+        _showLogo = true;
+      });
+    });
+
+    Timer(Duration(seconds: 2), () {
       setState(() {
         _isLoading = true;
       });
@@ -35,31 +46,45 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // Mematikan timer saat widget di dispose
+    _timer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0C2366), // Warna latar belakang biru (#0095CF)
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Hero(
-              tag: 'logo',
-              child: Image.asset(
-                'images/Logo.png', // Path ke logo.png
-                width: 270, // Sesuaikan lebar logo
-                height: 270, // Sesuaikan tinggi logo
-              ),
+      backgroundColor: Color(0xFF0C2366),
+      body: Stack(
+        children: [
+          AnimatedBackground(controller: _controller),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedOpacity(
+                  opacity: _showLogo ? 1.0 : 0.0,
+                  duration: Duration(seconds: 1),
+                  child: Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'images/Logo.png',
+                      width: 270,
+                      height: 270,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                if (_isLoading)
+                  AnimatedOpacity(
+                    opacity: _isLoading ? 1.0 : 0.0,
+                    duration: Duration(seconds: 1),
+                    child: AnimatedWaveLoading(),
+                  ),
+              ],
             ),
-            SizedBox(height: 20),
-            if (_isLoading) // Tampilkan animasi loading jika _isLoading true
-              AnimatedWaveLoading(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -125,5 +150,78 @@ class _AnimatedWaveLoadingState extends State<AnimatedWaveLoading>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+}
+
+class AnimatedBackground extends StatelessWidget {
+  final AnimationController controller;
+
+  AnimatedBackground({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: GeometryPainter(controller.value),
+          child: Container(),
+        );
+      },
+    );
+  }
+}
+
+class GeometryPainter extends CustomPainter {
+  final double animationValue;
+
+  GeometryPainter(this.animationValue);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = Colors.white.withOpacity(0.1)
+      ..style = PaintingStyle.fill;
+
+    final double circleRadius = 50;
+    final double rectSize = 40;
+    final double offsetValue = sin(animationValue * 2 * pi) * 20;
+
+    // Draw circles
+    canvas.drawCircle(
+      Offset(size.width * 0.2 + offsetValue, size.height * 0.3),
+      circleRadius,
+      paint,
+    );
+
+    canvas.drawCircle(
+      Offset(size.width * 0.8 - offsetValue, size.height * 0.7),
+      circleRadius,
+      paint,
+    );
+
+    // Draw rectangles
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.5, size.height * 0.5 + offsetValue),
+        width: rectSize,
+        height: rectSize,
+      ),
+      paint,
+    );
+
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.3, size.height * 0.8 - offsetValue),
+        width: rectSize,
+        height: rectSize,
+      ),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
