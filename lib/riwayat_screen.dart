@@ -1,5 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -8,88 +10,161 @@ void main() {
   ));
 }
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
+  @override
+  _HistoryPageState createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting(); // Initialize date formatting
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Riwayat Pompa Air',
-          style: TextStyle(color: Colors.white), // Atur warna teks putih
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xFF0C2366), // Atur warna AppBar
-        iconTheme: IconThemeData(
-            color: Colors.white), // Atur warna ikon kembali menjadi putih
+        backgroundColor: Color(0xFF0D85D8),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: ListView.builder(
-        itemCount: 15, // Jumlah entri riwayat
-        itemBuilder: (context, index) {
-          // Menggunakan ListTile untuk setiap entri
-          return ListTile(
-            leading:
-                Icon(Icons.check_circle, color: Colors.green), // Logo checklist
-            title: Text(
-              _generateDate(
-                  index), // Menggunakan fungsi _generateDate untuk menampilkan Hari, Tanggal/Bulan/Tahun
-              style: TextStyle(fontWeight: FontWeight.w600), // Font bold
-            ),
-            subtitle: Text(
-              _generateDateTime(index),
-              style: TextStyle(fontWeight: FontWeight.w400), // Font bold
-            ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('Riwayat Pompa Air')
+            .orderBy('waktu',
+                descending: true) // Mengubah dari descending ke ascending
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('Belum ada data riwayat'));
+          }
+
+          List<Map<String, dynamic>> events = _processData(snapshot.data!.docs);
+
+          return ListView.builder(
+            itemCount: events.length,
+            itemBuilder: (context, index) {
+              var event = events[index];
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              size: 14,
+                              color: Colors.grey[600],
+                            ),
+                            SizedBox(width: 2),
+                            Text(
+                              'Tanggal',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[600]),
+                            ),
+                            SizedBox(width: 80),
+                            Icon(Icons.access_time,
+                                size: 15, color: Colors.grey[600]),
+                            SizedBox(width: 2),
+                            Text(
+                              'Waktu',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 2), // Adjusted from 5 to 2
+                        Row(
+                          children: [
+                            Text(
+                              event['date'],
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(width: 25),
+                            Text(
+                              event['time'],
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            Spacer(),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 25),
+                              decoration: BoxDecoration(
+                                color: event['statusAlat']
+                                    ? Color(
+                                        0xFF89E578) // Warna hijau jika statusAlat bernilai true
+                                    : Color(
+                                        0xFFFC6C61), // Warna merah jika statusAlat bernilai false
+                                borderRadius: BorderRadius.circular(
+                                    16), // Mengubah ukuran sudut bulat menjadi 16
+                              ),
+                              child: Text(
+                                event['statusAlat'] ? ' ON ' : 'OFF',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
     );
   }
 
-  // Fungsi untuk menghasilkan tanggal secara acak
-  String _generateDate(int index) {
-    final now = DateTime.now();
-    final entryDate = now.subtract(Duration(days: index));
-    final entryDay = entryDate.day;
-    final entryMonth = entryDate.month;
-    final entryYear = entryDate.year;
+  List<Map<String, dynamic>> _processData(List<DocumentSnapshot> docs) {
+    List<Map<String, dynamic>> events = [];
 
-    return '${_getDayOfWeek(entryDate.weekday)}, $entryDay/${entryMonth}/${entryYear}';
-  }
+    for (var doc in docs) {
+      if (doc.exists) {
+        var data = doc.data() as Map<String, dynamic>;
+        var waktu = (data['waktu'] as Timestamp).toDate();
+        var statusAlat = data['status_alat'] as bool;
 
-  // Fungsi untuk menghasilkan tanggal dan waktu secara acak
-  String _generateDateTime(int index) {
-    final now = DateTime.now();
-    final random = Random();
-    final onHour = random.nextInt(24); // Acak jam untuk status "On"
-    final offHour =
-        onHour + random.nextInt(2) + 1; // Acak jam untuk status "Off"
-
-    now.subtract(Duration(
-        days:
-            index)); // Mendapatkan tanggal entri dengan mengurangi hari sesuai indeks
-    // final entryMonth = entryDate.month;
-    // final entryYear = entryDate.year;
-
-    return 'On: pada pukul ${onHour.toString().padLeft(2, '0')}:00 - \Off: pada pukul ${offHour.toString().padLeft(2, '0')}:00';
-  }
-
-  // Fungsi untuk mendapatkan nama hari dari nomor hari dalam seminggu
-  String _getDayOfWeek(int day) {
-    switch (day) {
-      case 1:
-        return 'Senin';
-      case 2:
-        return 'Selasa';
-      case 3:
-        return 'Rabu';
-      case 4:
-        return 'Kamis';
-      case 5:
-        return 'Jumat';
-      case 6:
-        return 'Sabtu';
-      case 7:
-        return 'Minggu';
-      default:
-        return '';
+        events.add({
+          'date': _formatDate(waktu),
+          'time': _formatTime(waktu),
+          'statusAlat': statusAlat,
+        });
+      }
     }
+
+    return events;
+  }
+
+  String _formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
+    return formatter.format(date);
+  }
+
+  String _formatTime(DateTime time) {
+    final DateFormat formatter = DateFormat('HH:mm');
+    return formatter.format(time);
   }
 }

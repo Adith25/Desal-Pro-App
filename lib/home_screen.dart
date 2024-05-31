@@ -1,13 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desal_pro/riwayat_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: HomePage(),
-  ));
-}
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   int volume1 = 0;
   int volume2 = 0;
   int volume3 = 0;
+  bool isPumpRunning = false;
 
   @override
   void initState() {
@@ -29,87 +24,55 @@ class _HomePageState extends State<HomePage> {
   }
 
   void initFirebaseData() {
-    // Lakukan inisialisasi data dari Firebase
-    FirebaseDatabase.instance
-        .ref()
-        .child('ph_air') // Menggunakan 'debit_air' sebagai kunci
-        .onValue
-        .listen((event) {
+    // Inisialisasi data dari Firebase
+    FirebaseDatabase.instance.ref().child('ph_air').onValue.listen((event) {
       print('Nilai dari Firebase: ${event.snapshot.value}');
-      // Memeriksa apakah event.snapshot.value tidak null sebelum mengaksesnya
       if (event.snapshot.value != null) {
-        // Konversi nilai ke tipe data int
         setState(() {
           ph_air = int.parse(event.snapshot.value.toString());
         });
       }
     });
 
-    FirebaseDatabase.instance
-        .ref()
-        .child('salinitas') // Menggunakan 'debit_air' sebagai kunci
-        .onValue
-        .listen((event) {
+    FirebaseDatabase.instance.ref().child('salinitas').onValue.listen((event) {
       print('Nilai dari Firebase: ${event.snapshot.value}');
-      // Memeriksa apakah event.snapshot.value tidak null sebelum mengaksesnya
       if (event.snapshot.value != null) {
-        // Konversi nilai ke tipe data int
         setState(() {
           kandungan_garam = double.parse(event.snapshot.value.toString());
         });
       }
     });
-    FirebaseDatabase.instance
-        .ref()
-        .child('suhu') // Menggunakan 'debit_air' sebagai kunci
-        .onValue
-        .listen((event) {
+
+    FirebaseDatabase.instance.ref().child('suhu').onValue.listen((event) {
       print('Nilai dari Firebase: ${event.snapshot.value}');
-      // Memeriksa apakah event.snapshot.value tidak null sebelum mengaksesnya
       if (event.snapshot.value != null) {
-        // Konversi nilai ke tipe data int
         setState(() {
           suhu_air = int.parse(event.snapshot.value.toString());
         });
       }
     });
-    FirebaseDatabase.instance
-        .ref()
-        .child('volume1') // Menggunakan 'debit_air' sebagai kunci
-        .onValue
-        .listen((event) {
+
+    FirebaseDatabase.instance.ref().child('volume1').onValue.listen((event) {
       print('Nilai dari Firebase: ${event.snapshot.value}');
-      // Memeriksa apakah event.snapshot.value tidak null sebelum mengaksesnya
       if (event.snapshot.value != null) {
-        // Konversi nilai ke tipe data int
         setState(() {
           volume1 = int.parse(event.snapshot.value.toString());
         });
       }
     });
-    FirebaseDatabase.instance
-        .ref()
-        .child('volume2') // Menggunakan 'debit_air' sebagai kunci
-        .onValue
-        .listen((event) {
+
+    FirebaseDatabase.instance.ref().child('volume2').onValue.listen((event) {
       print('Nilai dari Firebase: ${event.snapshot.value}');
-      // Memeriksa apakah event.snapshot.value tidak null sebelum mengaksesnya
       if (event.snapshot.value != null) {
-        // Konversi nilai ke tipe data int
         setState(() {
           volume2 = int.parse(event.snapshot.value.toString());
         });
       }
     });
-    FirebaseDatabase.instance
-        .ref()
-        .child('volume3') // Menggunakan 'debit_air' sebagai kunci
-        .onValue
-        .listen((event) {
+
+    FirebaseDatabase.instance.ref().child('volume3').onValue.listen((event) {
       print('Nilai dari Firebase: ${event.snapshot.value}');
-      // Memeriksa apakah event.snapshot.value tidak null sebelum mengaksesnya
       if (event.snapshot.value != null) {
-        // Konversi nilai ke tipe data int
         setState(() {
           volume3 = int.parse(event.snapshot.value.toString());
         });
@@ -178,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                       height: 11,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 16, 229, 23)          ),
+                        color: Color.fromARGB(255, 16, 229, 23),
+                      ),
                     ),
                   ],
                 ),
@@ -198,7 +162,7 @@ class _HomePageState extends State<HomePage> {
             top: 200,
             left: 19,
             right: 19,
-            bottom: 19, // Menaruh container ke bawah
+            bottom: 19,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
@@ -227,28 +191,28 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xFF0C2366),
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Container(
-                      width: 300, // Lebar card
+                      width: 300,
                       height: 100,
                       padding: EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'pH Air                                             : $ph_air',
+                            'pH Air:                                        $ph_air',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kandungan Garam                       : $kandungan_garam',
+                            'Kandungan Garam:                   $kandungan_garam',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Suhu Air                                         : $suhu_air°C',
+                            'Suhu Air:                                    $suhu_air°C',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -278,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                     color: Color(0xFF0C2366),
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Container(
-                      width: 300, // Lebar card
+                      width: 300,
                       height: 468,
                       padding: EdgeInsets.all(20),
                       child: Column(
@@ -294,14 +258,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air                                     : $volume1 ml',
+                    
+                            'Volume Air:                               $volume1 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan             : 5000 ml',
+                            'Kapasitas Penampungan:       5000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -309,7 +274,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: 20),
                           Divider(
-                            // Garis pemisah 1
                             color: Colors.white,
                           ),
                           SizedBox(height: 10),
@@ -323,20 +287,21 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air                                     : $volume2 ml',
+                            'Volume Air:                                $volume2 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
-                          Text('Kapasitas Penampungan             : 2000 ml',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              )),
+                          Text(
+                            'Kapasitas Penampungan:        2000 ml',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
                           SizedBox(height: 10),
                           Divider(
-                            // Garis pemisah 2
                             color: Colors.white,
                           ),
                           SizedBox(height: 20),
@@ -350,24 +315,23 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Volume Air                                     : $volume3 ml',
+                            'Volume Air:                                $volume3 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            'Kapasitas Penampungan             : 7000 ml',
+                            'Kapasitas Penampungan:        7000 ml',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(height: 20),
-                          _buildCheckButton(context), // Tombol cek
                           SizedBox(height: 10),
-                          _buildHistoryButton(
-                              context), // Tombol riwayat pompa air
+                          _buildSwitch(),
+                          SizedBox(height: 10),
+                          _buildHistoryButton(context),
                         ],
                       ),
                     ),
@@ -376,133 +340,91 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 55),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 55),
-                // Tambahkan konten tambahan di sini
-              ],
-            ),
-          ),
         ],
       ),
     );
   }
-}
 
-bool isPumpRunning = false;
-
-Widget _buildCheckButton(BuildContext context) {
-  return Container(
-    margin: EdgeInsets.symmetric(horizontal: 16),
-    child: ElevatedButton.icon(
-      onPressed: () {
-        if (!isPumpRunning) {
-          _showConfirmationDialog(context);
-        } else {
-          _stopPump();
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        padding: EdgeInsets.symmetric(
-            vertical: 5, horizontal: 80), // Lebar tombol diperbesar
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ), // Warna teks dan icon button
-      ),
-      icon: Icon(
-        Icons.power_settings_new,
-        color: const Color.fromARGB(255, 243, 0, 0),
-        size: 20,
-      ),
-      label: Text(
-        isPumpRunning ? 'Stop Pompa Air' : 'Start Pompa Air',
-        style: TextStyle(
-          fontSize: 9,
-          color: const Color.fromARGB(255, 0, 0, 0),
-          fontWeight: FontWeight.bold,
+Widget _buildSwitch() {
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isPumpRunning ? Colors.red : Colors.green, // Button color
+          padding: EdgeInsets.symmetric(
+              horizontal: 24, vertical: 12), // Button padding
         ),
-      ),
-    ),
-  );
-}
+        onPressed: () async {
+          setState(() {
+            isPumpRunning = !isPumpRunning; // Toggle pump status
+          });
 
-void _showConfirmationDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Konfirmasi'),
-        content: Text('Apakah Anda ingin menyalakan pompa air?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _startPump();
-              // Setelah memulai pompa air, ubah status tombol
-              isPumpRunning = true;
-            },
-            child: Text('Ya'),
+          if (isPumpRunning) {
+            _startPump(); // Call function to start the pump
+          } else {
+            _stopPump(); // Call function to stop the pump
+          }
+        },
+        child: Text(
+          isPumpRunning ? 'Matikan Pompa Air' : 'Hidupkan Pompa Air',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Tidak'),
+        ),
+      ),
+    );
+  }
+
+
+
+  void _startPump() async {
+    // Logika untuk memulai pompa air
+    await FirebaseFirestore.instance.collection('Riwayat Pompa Air').add({
+      'status_alat': true,
+      'waktu': Timestamp.now(),
+    });
+  }
+
+  void _stopPump() async {
+    // Logika untuk menghentikan pompa air
+    await FirebaseFirestore.instance.collection('Riwayat Pompa Air').add({
+      'status_alat': false,
+      'waktu': Timestamp.now(),
+    });
+  }
+
+  Widget _buildHistoryButton(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: () {
+          // Navigasi ke halaman riwayat
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HistoryPage()),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.blue,
+          backgroundColor: Colors.transparent,
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(color: Colors.blue),
           ),
-        ],
-      );
-    },
-  );
-}
-
-void _startPump() {
-  // Lakukan logika untuk memulai pompa air
-  // Misalnya, kirim perintah ke perangkat keras
-}
-
-void _stopPump() {
-  // Lakukan logika untuk menghentikan pompa air
-  // Misalnya, kirim perintah ke perangkat keras
-  // Setelah menghentikan pompa air, ubah status tombol
-  isPumpRunning = false;
-}
-
-Widget _buildHistoryButton(BuildContext context) {
-  return Container(
-    alignment: Alignment.center,
-    margin: EdgeInsets.symmetric(horizontal: 16),
-    child: ElevatedButton(
-      onPressed: () {
-        // Navigasi ke halaman riwayat
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HistoryPage()),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.blue,
-        backgroundColor: Colors.transparent, // Warna teks
-        padding: EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 20,
-        ), // Ukuran tombol
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15), // Mengubah bentuk tombol
-          side: BorderSide(color: Colors.blue), // Menambahkan border
+        ),
+        child: Text(
+          'Riwayat Pompa Air',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-      child: Text(
-        'Riwayat Pompa Air',
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
+    );
+  }
 }
