@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double ph_air = 0.0;
   double kandungan_garam = 0.0;
-  int suhu_air = 0;
+  double suhu_air = 0;
   int volume1 = 0;
   int volume2 = 0;
   int volume3 = 0;
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       print('Nilai dari Firebase: ${event.snapshot.value}');
       if (event.snapshot.value != null) {
         setState(() {
-          suhu_air = int.parse(event.snapshot.value.toString());
+          suhu_air = double.parse(event.snapshot.value.toString());
         });
       }
     });
