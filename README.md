@@ -1,7 +1,4 @@
 # DesalPro
-
-## Deskripsi Proyek
-
 DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat desalinasi air laut berbasis mikrokontroler ESP32 dan aplikasi mobile untuk memantau kualitas air hasil desalinasi. Alat ini menggunakan metode distilasi dan dilengkapi dengan berbagai sensor untuk mengukur parameter kualitas air seperti pH, salinitas, dan suhu.
 
 ## Fitur Utama
