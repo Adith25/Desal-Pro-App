@@ -6,6 +6,13 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 
 ## Fitur
 
+### Aplikasi Mobile
+
+- **Pemantauan Real-time**: Memantau kualitas air (pH, salinitas, suhu) secara langsung dari aplikasi.
+- **Kontrol Pompa**: Menghidupkan atau mematikan pompa air melalui aplikasi.
+- **Status Koneksi**: Menampilkan status koneksi alat dengan aplikasi.
+- **Riwayat Penggunaan**: Menyimpan dan menampilkan riwayat penggunaan pompa air.
+
 ### Alat Desalinasi
 
 - **ESP32 sebagai mikrokontroler utama**: Mengontrol semua operasi alat.
@@ -16,12 +23,7 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 - **Sensor Salinitas**: Mengukur kadar garam dalam air.
 - **Sensor pH**: Mengukur tingkat keasaman air.
 
-### Aplikasi Mobile
 
-- **Pemantauan Real-time**: Memantau kualitas air (pH, salinitas, suhu) secara langsung dari aplikasi.
-- **Kontrol Pompa**: Menghidupkan atau mematikan pompa air melalui aplikasi.
-- **Status Koneksi**: Menampilkan status koneksi alat dengan aplikasi.
-- **Riwayat Penggunaan**: Menyimpan dan menampilkan riwayat penggunaan pompa air.
 
 ## Tahap Pengembangan
 
