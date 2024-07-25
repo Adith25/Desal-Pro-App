@@ -1,4 +1,4 @@
-# DesalPro - Aplikasi untuk Sistem Desalinasi Berbasis Internet of Things untuk Meningkatkan Akses Air Irigasi pada Lahan Pertanian Pinggir Pantai
+# DesalPro
 
 ## Deskripsi Proyek
 
