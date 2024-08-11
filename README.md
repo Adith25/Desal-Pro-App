@@ -12,14 +12,14 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 
 
 ##Teknologi Yang Digunakan
-- Flutter : Sebagai framework yang digunakan untuk pengembangan aplikasi mobile.
-- ESP32 : Mikrokontroler untuk mengintegrasikan sensor ultrasonik dan terhubung dengan Firebase.
-- **Pompa Air**: Mengalirkan air dari sumber air asin ke alat.
-- **Pemanas Air**: Sumber panas untuk proses distilasi.
-- **Sensor Load Cell**: Mengukur berat air untuk otomatisasi pemanas.
-- **Sensor Suhu**: Mengukur suhu air.
-- **Sensor Salinitas**: Mengukur kadar garam dalam air.
-- **Sensor pH**: Mengukur tingkat keasaman air.
+- **Flutter** : Framework yang digunakan untuk pengembangan aplikasi mobile.
+- **ESP32** : Mikrokontroler untuk Mengontrol semua operasi alat.
+- **Pompa Air** : Digunakan untuk mengalirkan air dari sumber air asin ke alat.
+- **Pemanas Air** : Sumber panas untuk melakukan proses distilasi.
+- **Sensor Load Cell** : Mengukur berat air untuk otomatisasi pemanas.
+- **Sensor Suhu** : Mengukur suhu air.
+- **Sensor Salinitas** : Mengukur kadar kandungan garam dalam air.
+- **Sensor pH** : Mengukur tingkat kandungan keasaman air.
 
 ## Instalasi dan Penggunaan
 
