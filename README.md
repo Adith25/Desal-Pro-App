@@ -17,7 +17,6 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 - **Sensor pH**: Mengukur tingkat keasaman air.
 
 
-
 ## Tahap Pengembangan
 1. **Evaluasi Rancangan**: Evaluasi terhadap rancangan mekanis, elektronis, dan desain UI/UX aplikasi.
 2. **Pengembangan Prototype Hardware**: Pembuatan prototype alat desalinasi menggunakan ESP32 dan sensor-sensor terkait.
