@@ -20,7 +20,7 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 - **Sensor Salinitas**: Mengukur kadar kandungan garam dalam air.
 - **Sensor pH**: Mengukur tingkat kandungan keasaman air.
 
-### Langkah-langkah
+### Instalasi
 
 1. **Clone this Repository**:
    ```sh
