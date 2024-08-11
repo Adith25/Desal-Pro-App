@@ -30,7 +30,6 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 
 ### Langkah-langkah
 
-1. **Clone Repository**:
+1. **Clone this Repository**:
    ```sh
    git clone https://github.com/Adith25/Desal-Pro-App.git
-   cd repo-name
