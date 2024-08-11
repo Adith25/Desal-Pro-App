@@ -10,7 +10,7 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 ### Alat Desalinasi
 - **ESP32 sebagai mikrokontroler utama**: Mengontrol semua operasi alat.
 
-##Teknologi Yang Digunakan
+## Teknologi Yang Digunakan
 - **Flutter**: Framework yang digunakan untuk pengembangan aplikasi mobile.
 - **ESP32**: Mikrokontroler untuk Mengontrol semua operasi alat.
 - **Pompa Air**: Digunakan untuk mengalirkan air dari sumber air asin ke alat.
