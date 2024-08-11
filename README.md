@@ -9,19 +9,17 @@ DesalPro adalah sebuah proyek yang bertujuan untuk mengembangkan sebuah alat des
 
 ### Alat Desalinasi
 - **ESP32 sebagai mikrokontroler utama**: Mengontrol semua operasi alat.
+
+
+##Teknologi Yang Digunakan
+- Flutter : Sebagai framework yang digunakan untuk pengembangan aplikasi mobile.
+- ESP32 : Mikrokontroler untuk mengintegrasikan sensor ultrasonik dan terhubung dengan Firebase.
 - **Pompa Air**: Mengalirkan air dari sumber air asin ke alat.
 - **Pemanas Air**: Sumber panas untuk proses distilasi.
 - **Sensor Load Cell**: Mengukur berat air untuk otomatisasi pemanas.
 - **Sensor Suhu**: Mengukur suhu air.
 - **Sensor Salinitas**: Mengukur kadar garam dalam air.
 - **Sensor pH**: Mengukur tingkat keasaman air.
-
-
-## Tahap Pengembangan
-1. **Evaluasi Rancangan**: Evaluasi terhadap rancangan mekanis, elektronis, dan desain UI/UX aplikasi.
-2. **Pengembangan Prototype Hardware**: Pembuatan prototype alat desalinasi menggunakan ESP32 dan sensor-sensor terkait.
-3. **Pengembangan Prototype Software**: Pembuatan aplikasi mobile untuk memantau dan mengontrol alat desalinasi.
-4. **Pengujian Alat dan Evaluasi**: Pengujian dan evaluasi alat serta aplikasi untuk memastikan fungsionalitas sesuai rancangan.
 
 ## Instalasi dan Penggunaan
 
